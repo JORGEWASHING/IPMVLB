@@ -102,3 +102,125 @@ for i in range(count):
     plt.title(Titles[i])
     plt.imshow(images[i])
 plt.show()
+**# EXPT No.4**
+# Averaging Filter and Meadian FIlter
+import cv2
+import matplotlib.pyplot as plt
+# Read image
+img = cv2.imread('noisyimage.png')
+# Convert to grayscale if image is color
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# Average filtering (Mean filter)
+avg_filter = cv2.blur(gray, (10, 10))
+# Median filtering
+median_filter = cv2.medianBlur(gray, 3)
+# Display images
+plt.subplot(1,3,1)
+plt.title("Grayscale Image")
+plt.imshow(gray, cmap='gray')
+plt.axis('off')
+plt.subplot(1,3,2)
+plt.title("Average Filter")
+plt.imshow(avg_filter, cmap='gray')
+plt.axis('off')
+plt.subplot(1,3,3)
+plt.title("Median Filter")
+plt.imshow(median_filter, cmap='gray')
+plt.axis('off')
+plt.show()
+
+**# EXPT NO 5**
+# Morphological operations
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# Read image
+img = cv2.imread('hand.png', 0) # read directly in grayscale
+# Convert to binary image (needed for morphology)
+_, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+# Structuring element (kernel)
+kernel = np.ones((3,3), np.uint8)
+# Erosion
+erosion = cv2.erode(binary, kernel, iterations=1)
+# Dilation
+dilation = cv2.dilate(binary, kernel, iterations=1)
+# Boundary Extraction = Original - Erosion
+boundary = cv2.subtract(binary, erosion)
+# Display results
+plt.subplot(2,2,1)
+plt.title("Binary Image")
+plt.imshow(binary, cmap='gray')
+plt.axis('off')
+plt.subplot(2,2,2)
+plt.title("Erosion")
+plt.imshow(erosion, cmap='gray')
+plt.axis('off')
+plt.subplot(2,2,3)
+plt.title("Dilation")
+plt.imshow(dilation, cmap='gray')
+plt.axis('off')
+plt.subplot(2,2,4)
+plt.title("Boundary Extraction")
+plt.imshow(boundary, cmap='gray')
+plt.axis('off')
+plt.show()
+
+**# EXPT NO 6**
+# Canny Edge Detection
+import cv2 as cv
+import matplotlib.pyplot as plt
+import numpy as np
+
+def canny_edge_detection(image_path, lower_threshold, upper_threshold):
+
+    # 1. Load the image in grayscale
+    img = cv.imread(image_path, cv.IMREAD_GRAYSCALE)
+
+    # 2. Apply Canny edge detection
+    # The function automatically performs noise reduction (Gaussian blur),
+    # gradient calculation, non-maximum suppression, and hysteresis thresholding
+    edges = cv.Canny(img, lower_threshold, upper_threshold)
+
+    # 3. Visualize the results
+    plt.figure(figsize=(10, 5))
+
+    plt.subplot(121)
+    plt.imshow(img, cmap='gray')
+    plt.title('Original Image')
+    plt.xticks([]), plt.yticks([])
+
+    plt.subplot(122)
+    plt.imshow(edges, cmap='gray')
+    plt.title('Canny Edge Image')
+    plt.xticks([]), plt.yticks([])
+
+    plt.show()
+
+canny_edge_detection(
+    image_path='edge.jpg',
+    lower_threshold=100,
+    upper_threshold=200
+)
+**# EXPT NO 7**
+# K-Means Clustering Algorithm
+import matplotlib.pyplot as plt
+x = [4, 5, 10, 4, 3, 11, 14 , 6, 10, 12]
+y = [21, 19, 24, 17, 16, 25, 24, 22, 21, 21]
+plt.scatter(x, y)
+plt.show()
+from sklearn.cluster import KMeans
+data = list(zip(x, y))
+inertias = []
+for i in range(1,11):
+    kmeans = KMeans(n_clusters=i)
+    kmeans.fit(data)
+    inertias.append(kmeans.inertia_)
+plt.plot(range(1,11), inertias, marker='o')
+plt.title('Elbow method')
+plt.xlabel('Number of clusters')
+plt.ylabel('Inertia')
+plt.show()
+kmeans = KMeans(n_clusters=2)
+kmeans.fit(data)
+plt.scatter(x, y, c=kmeans.labels_)
+plt.show()
